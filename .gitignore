@@ -1,0 +1,9 @@
+node_modules/
+connect-report.csv
+connect-report.json
+migrated-accounts.json
+migrated-accounts.json.tmp
+apps.json
+.env
+.env.*
+migrated-accounts.json.*

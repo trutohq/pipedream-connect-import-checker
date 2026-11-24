@@ -1,0 +1,16 @@
+{
+  "slack": {
+    "clientId": "1234567890.1234567890",
+    "pdOauthAppId": "oa_abc123",
+    "envIntegrationId": "<Truto environment integration id>",
+    "requiredScopes": ["chat:write"],
+    "cheapRead": "/unified/instant-messaging/channels?limit=1"
+  },
+  "hubspot": {
+    "clientId": "<HubSpot app client id>",
+    "pdOauthAppId": "oa_def456",
+    "envIntegrationId": "<Truto environment integration id>",
+    "requiredScopes": ["crm.objects.contacts.read"],
+    "cheapRead": "/unified/crm/contacts?limit=1"
+  }
+}

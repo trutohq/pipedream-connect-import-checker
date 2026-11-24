@@ -1,0 +1,19 @@
+{
+  "name": "pipedream-connect-import-checker",
+  "version": "0.1.0",
+  "description": "Dry-run check of which Pipedream Connect accounts can move to Truto without a reconnect, with an opt-in one-customer import.",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "pipedream-connect-import-checker": "src/cli.ts"
+  },
+  "scripts": {
+    "check": "bun src/cli.ts",
+    "test": "bun test",
+    "typecheck": "tsc --noEmit --strict"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.4.5",
+    "typescript": "^7.0.2"
+  }
+}
