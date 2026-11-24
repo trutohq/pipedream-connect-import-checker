@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "truto-docs": {
+      "type": "http",
+      "url": "https://docs-mcp.truto.one/mcp"
+    }
+  }
+}

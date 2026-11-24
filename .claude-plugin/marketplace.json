@@ -1,0 +1,15 @@
+{
+  "name": "pipedream-connect-import-checker",
+  "description": "Move Pipedream Connect accounts and workflows to Truto.",
+  "owner": {
+    "name": "Truto",
+    "url": "https://truto.one"
+  },
+  "plugins": [
+    {
+      "name": "pipedream-to-truto",
+      "source": "./",
+      "description": "Skill and Truto docs MCP for moving Pipedream Connect accounts and workflows to Truto."
+    }
+  ]
+}

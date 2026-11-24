@@ -1,0 +1,10 @@
+{
+  "name": "pipedream-to-truto",
+  "version": "0.1.0",
+  "description": "Check which Pipedream Connect accounts can move to Truto without a reconnect, then plan and run the move one customer at a time.",
+  "author": { "name": "Truto", "url": "https://truto.one" },
+  "homepage": "https://truto.one/blog/how-to-migrate-pipedream-workflows-to-truto/",
+  "repository": "https://github.com/trutohq/pipedream-connect-import-checker",
+  "license": "MIT",
+  "keywords": ["pipedream", "pipedream-connect", "truto", "oauth", "migration"]
+}

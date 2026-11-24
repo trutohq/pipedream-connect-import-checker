@@ -1,0 +1,23 @@
+# pipedream-connect-import-checker
+
+> A CLI that checks which Pipedream Connect accounts can move to Truto without the customer connecting again. The default mode is a read-only dry run that writes a CSV and a JSON report with next steps per group. An opt-in import moves one customer at a time and deletes the Connect account only after the Truto account is verified.
+
+Pipedream Workflows shuts down on March 31, 2027. Pipedream Connect is not affected. Agents: read AGENTS.md first and follow its hard rules.
+
+## Docs
+
+- [AGENTS.md](https://github.com/trutohq/pipedream-connect-import-checker/blob/main/AGENTS.md): steps and hard rules for AI coding agents
+- [README](https://github.com/trutohq/pipedream-connect-import-checker/blob/main/README.md): what each check means, the report format, import mode and limits
+- [Skill: pipedream-to-truto](https://github.com/trutohq/pipedream-connect-import-checker/blob/main/skills/pipedream-to-truto/SKILL.md): check, Truto setup, workflow mapping, customer moves
+- [Migration guide](https://truto.one/blog/how-to-migrate-pipedream-workflows-to-truto/): how to migrate Pipedream Workflows to Truto
+
+## Truto
+
+- [Truto docs MCP](https://docs-mcp.truto.one/mcp): public MCP server (streamable HTTP) with search_docs, get_doc_page, list_api_endpoints, get_api_endpoint
+- [Truto docs llms.txt](https://truto.one/docs/llms.txt): index of Truto's documentation
+- [Truto agent skills](https://github.com/trutohq/truto-skills): skills for the Truto API, CLI and JSONata
+
+## Optional
+
+- [Pipedream Connect API: list accounts](https://pipedream.com/docs/connect/api-reference/list-accounts)
+- [Pipedream Connect API: delete account](https://pipedream.com/docs/connect/api-reference/delete-account)

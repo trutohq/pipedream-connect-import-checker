@@ -1,0 +1,4 @@
+{
+  "slack": { "clientId": "1234.5678", "requiredScopes": ["chat:write"] },
+  "hubspot": { "clientId": "hub-client", "requiredScopes": ["crm.objects.contacts.read"] }
+}

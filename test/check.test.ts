@@ -195,20 +195,32 @@ describe('dry run (main)', () => {
   })
 })
 
-test('README sample output matches the fixture run', async () => {
-  // Keeps the README honest: the sample block is the real output for these fixtures.
+test('README sample output matches the offline example run', async () => {
+  // Keeps the README honest: the sample block is the real output for the files in examples/.
   const out: string[] = []
-  const dir = mkdtempSync(join(tmpdir(), 'pdcheck-'))
-  const cfg = join(dir, 'apps.json')
-  await Bun.write(cfg, JSON.stringify({ slack: slackRule, hubspot: { clientId: 'hub-client', requiredScopes: ['crm.objects.contacts.read'] } }))
-  const { fn } = fakeFetch((c) => pipedreamHandler([fixtureAccounts])(c) ?? empty(500))
-  await main(['--config', cfg, '--csv', 'connect-report.csv', '--json', 'connect-report.json'], ENV, {
-    fetch: fn,
-    clock: fakeClock(),
-    out: (m) => out.push(m),
-    err: (m) => out.push(m),
-    writeFile: () => {},
-  })
+  const files: Record<string, string> = {}
+  const code = await main(
+    ['--accounts-file', 'examples/accounts.sample.json', '--config', 'examples/apps.sample.json'],
+    {},
+    { fetch: async () => { throw new Error('no network in offline mode') }, clock: fakeClock(), out: (m) => out.push(m), err: (m) => out.push(m), writeFile: (p, d) => (files[p] = d) },
+  )
+  expect(code).toBe(0)
   const readme = readFileSync(join(import.meta.dir, '..', 'README.md'), 'utf8')
   expect(readme).toContain(out.join('\n'))
+  const report = JSON.parse(files['connect-report.json']!)
+  expect(Object.keys(report.next_steps).sort()).toEqual(['manual_check', 'movable', 'reconnect'])
+  expect(report.next_steps.movable.accounts).toBe(2)
+  for (const group of Object.values(report.next_steps) as { docs: { url: string }[] }[]) {
+    for (const d of group.docs) expect(d.url).toStartWith('https://truto.one/')
+  }
+  expect(JSON.stringify(files)).not.toContain('fake-access-token')
+  expect(JSON.stringify(files)).not.toContain('fake-api-key')
+})
+
+test('--import refuses --accounts-file', async () => {
+  const err: string[] = []
+  const code = await main(['--import', '--accounts-file', 'examples/accounts.sample.json'], ENV, {
+    fetch: async () => { throw new Error('no network') }, clock: fakeClock(), out: () => {}, err: (m) => err.push(m), writeFile: () => {},
+  })
+  expect(code).toBe(2)
 })

@@ -1,5 +1,13 @@
 # pipedream-connect-import-checker
 
+Paste this into Claude Code, Cursor or Codex:
+
+```text
+Check which of my Pipedream Connect accounts can move to Truto, using github.com/trutohq/pipedream-connect-import-checker
+```
+
+The agent clones this repo, reads [`AGENTS.md`](AGENTS.md), runs a read-only dry run, and explains the result. It moves a customer only after you say yes for that customer.
+
 Pipedream Workflows shuts down on March 31, 2027. Workflows data, including connected-account tokens, is deleted by April 30, 2027. Pipedream Connect is not affected.
 
 This CLI answers one question before you move: **which of your Pipedream Connect accounts can move to another platform without the customer connecting again?**
@@ -27,10 +35,16 @@ Without `--config`, the dry run cannot check client IDs or scopes. It still sort
 
 ## Sample output
 
-From the fixture run in `test/` (the test suite checks that this block matches):
+Try it with no credentials and no network, on the sample accounts in `examples/`:
+
+```bash
+bun src/cli.ts --accounts-file examples/accounts.sample.json --config examples/apps.sample.json
+```
+
+The test suite checks that this block matches the real output:
 
 ```text
-Pipedream project proj_abc123 (production): 8 Connect accounts
+file examples/accounts.sample.json: 8 Connect accounts
 
 app      accounts  movable  reconnect  manual_check
 slack           5        1          4             0
@@ -43,7 +57,7 @@ movable      = OAuth on your own client, credentials returned, scopes present
 reconnect    = the customer must connect again in Truto
 manual_check = key-based or no-auth app; test one account by hand
 
-Report: connect-report.csv, connect-report.json
+Report: connect-report.csv, connect-report.json (next_steps in the JSON says what to do per group)
 ```
 
 Three rows of `connect-report.csv`:
@@ -55,7 +69,53 @@ account_id,external_user_id,app,auth_type,status,reasons,notes,credential_keys,o
 "apn_keys1","cus_6","openai","keys","manual_check","key-based app: credential fields returned, import not confirmed; test one account by hand","","api_key","","false","","true","false","",""
 ```
 
+`connect-report.json` holds `summary` (counts per app), `config_checked`, `accounts` (one row per account, as in the CSV) and `next_steps`. `next_steps` has one entry per group that has accounts, so a person or an agent can act on the report directly:
+
+```json
+"next_steps": {
+  "reconnect": {
+    "accounts": 4,
+    "meaning": "The tokens cannot move: Pipedream's own OAuth client, another client, missing scopes, or a broken account.",
+    "steps": ["Decide per app: keep these accounts on Pipedream Connect ...", "..."],
+    "docs": [{ "title": "Connect an account (link token, Connect UI)", "url": "https://truto.one/docs/guides/integrated-accounts/connecting-an-account/" }]
+  }
+}
+```
+
+`--accounts-file` also reads your own saved list-accounts responses (one `{ data: [...] }` response, an array of pages, or an array of accounts). A response saved with `include_credentials=true` holds live tokens, so keep such a file out of git and delete it after use.
+
 The report holds credential **key names** only (`credential_keys`), never token or key values. Cells that start with `=`, `+`, `-` or `@` get a leading `'`, so a spreadsheet does not run a customer-supplied ID as a formula.
+
+## Use it with an AI coding agent
+
+| Piece | What it is for |
+|---|---|
+| [`AGENTS.md`](AGENTS.md) | The steps and hard rules. Codex and Cursor read it. Claude Code reads it through [`CLAUDE.md`](CLAUDE.md). |
+| [`skills/pipedream-to-truto`](skills/pipedream-to-truto/SKILL.md) | An [Agent Skill](https://agentskills.io/specification): check, set up Truto, map each workflow, move customers. Works from any folder. |
+| [`.mcp.json`](.mcp.json), [`.cursor/mcp.json`](.cursor/mcp.json) | Truto's public docs MCP server, `https://docs-mcp.truto.one/mcp`, so the agent reads Truto's docs instead of guessing. |
+| [`.claude-plugin/`](.claude-plugin/) | A Claude Code plugin with the skill and the docs MCP. |
+| [`llms.txt`](llms.txt) | A short index of this repo for LLMs. |
+
+Install the skill for any agent the [`skills`](https://github.com/vercel-labs/skills) CLI supports (Claude Code, Cursor, Codex and more):
+
+```bash
+npx skills add trutohq/pipedream-connect-import-checker
+```
+
+Or install the Claude Code plugin:
+
+```text
+/plugin install pipedream-to-truto --marketplace trutohq/pipedream-connect-import-checker
+```
+
+On older Claude Code versions:
+
+```text
+/plugin marketplace add trutohq/pipedream-connect-import-checker
+/plugin install pipedream-to-truto@pipedream-connect-import-checker
+```
+
+**Why there is no MCP server for the check.** Claude Code, Cursor and Codex all run shell commands, so the agent runs the CLI and reads the JSON report. An MCP server would add a second way to do the same thing. It would also need your Pipedream client secret in the MCP client's config file, where the CLI reads it from a git-ignored `.env`. The import stays a CLI command that the agent runs only after your yes.
 
 ## Install and run
 
@@ -67,13 +127,13 @@ cd pipedream-connect-import-checker
 bun install
 ```
 
-Set the Pipedream API credentials. Create an OAuth client under your Pipedream workspace's API settings.
+Set the Pipedream API credentials. Create an OAuth client under your Pipedream workspace's API settings. Put the values in a `.env` file in the repo root (Bun loads it, and git ignores it), or export them:
 
 ```bash
-export PD_CLIENT_ID=...
-export PD_CLIENT_SECRET=...
-export PD_PROJECT_ID=proj_...
-export PD_ENVIRONMENT=production   # or development
+PD_CLIENT_ID=...
+PD_CLIENT_SECRET=...
+PD_PROJECT_ID=proj_...
+PD_ENVIRONMENT=production   # or development
 ```
 
 Dry run over the whole project:

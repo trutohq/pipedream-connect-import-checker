@@ -1,0 +1,161 @@
+{
+  "data": [
+    {
+      "id": "apn_good1",
+      "name": "Acme Slack",
+      "external_id": "cus_1",
+      "healthy": true,
+      "dead": false,
+      "app": {
+        "name_slug": "slack",
+        "auth_type": "oauth"
+      },
+      "expires_at": "2030-01-02T00:00:00.000Z",
+      "authorized_scopes": [
+        "chat:write",
+        "channels:read"
+      ],
+      "next_refresh_at": "2030-01-01T23:00:00.000Z",
+      "credentials": {
+        "oauth_client_id": "1234.5678",
+        "oauth_access_token": "fake-access-token-not-real",
+        "oauth_refresh_token": "fake-refresh-token-not-real"
+      }
+    },
+    {
+      "id": "apn_pdclient",
+      "name": "Acme Slack",
+      "external_id": "cus_2",
+      "healthy": true,
+      "dead": false,
+      "app": {
+        "name_slug": "slack",
+        "auth_type": "oauth"
+      },
+      "expires_at": "2030-01-02T00:00:00.000Z",
+      "authorized_scopes": [
+        "chat:write",
+        "channels:read"
+      ],
+      "next_refresh_at": "2030-01-01T23:00:00.000Z",
+      "credentials": null
+    },
+    {
+      "id": "apn_otherclient",
+      "name": "Acme Slack",
+      "external_id": "cus_3",
+      "healthy": true,
+      "dead": false,
+      "app": {
+        "name_slug": "slack",
+        "auth_type": "oauth"
+      },
+      "expires_at": "2030-01-02T00:00:00.000Z",
+      "authorized_scopes": [
+        "chat:write",
+        "channels:read"
+      ],
+      "next_refresh_at": "2030-01-01T23:00:00.000Z",
+      "credentials": {
+        "oauth_client_id": "someone-else",
+        "oauth_access_token": "fake-access-token-not-real",
+        "oauth_refresh_token": "fake-refresh-token-not-real"
+      }
+    },
+    {
+      "id": "apn_noscope",
+      "name": "Acme Slack",
+      "external_id": "cus_4",
+      "healthy": true,
+      "dead": false,
+      "app": {
+        "name_slug": "slack",
+        "auth_type": "oauth"
+      },
+      "expires_at": "2030-01-02T00:00:00.000Z",
+      "authorized_scopes": [
+        "channels:read"
+      ],
+      "next_refresh_at": "2030-01-01T23:00:00.000Z",
+      "credentials": {
+        "oauth_client_id": "1234.5678",
+        "oauth_access_token": "fake-access-token-not-real",
+        "oauth_refresh_token": "fake-refresh-token-not-real"
+      }
+    },
+    {
+      "id": "apn_dead",
+      "name": "Acme Slack",
+      "external_id": "cus_5",
+      "healthy": false,
+      "dead": true,
+      "app": {
+        "name_slug": "slack",
+        "auth_type": "oauth"
+      },
+      "expires_at": "2030-01-02T00:00:00.000Z",
+      "authorized_scopes": [
+        "chat:write",
+        "channels:read"
+      ],
+      "next_refresh_at": "2030-01-01T23:00:00.000Z",
+      "credentials": {
+        "oauth_client_id": "1234.5678",
+        "oauth_access_token": "fake-access-token-not-real",
+        "oauth_refresh_token": "fake-refresh-token-not-real"
+      }
+    },
+    {
+      "id": "apn_hub1",
+      "name": "Acme Slack",
+      "external_id": "cus_8",
+      "healthy": true,
+      "dead": false,
+      "app": {
+        "name_slug": "hubspot",
+        "auth_type": "oauth"
+      },
+      "expires_at": "2030-01-02T00:00:00.000Z",
+      "authorized_scopes": [
+        "crm.objects.contacts.read"
+      ],
+      "next_refresh_at": "2030-01-01T22:00:00.000Z",
+      "credentials": {
+        "oauth_client_id": "hub-client",
+        "oauth_access_token": "fake-access-token-not-real",
+        "oauth_refresh_token": "fake-refresh-token-not-real",
+        "base_url": "https://api.example.com"
+      }
+    },
+    {
+      "id": "apn_keys1",
+      "external_id": "cus_6",
+      "healthy": true,
+      "dead": false,
+      "app": {
+        "name_slug": "openai",
+        "auth_type": "keys"
+      },
+      "authorized_scopes": [],
+      "credentials": {
+        "api_key": "fake-api-key-not-real"
+      }
+    },
+    {
+      "id": "apn_none1",
+      "external_id": "cus_7",
+      "healthy": true,
+      "app": {
+        "name_slug": "http",
+        "auth_type": "none"
+      },
+      "credentials": null
+    }
+  ],
+  "page_info": {
+    "count": 8,
+    "total_count": 8,
+    "start_cursor": null,
+    "end_cursor": null
+  }
+}
