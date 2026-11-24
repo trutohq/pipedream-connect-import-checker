@@ -16,7 +16,7 @@ Pipedream Workflows shuts down on March 31, 2027, and its data is deleted by Apr
    ```bash
    git clone https://github.com/trutohq/pipedream-connect-import-checker
    ```
-   Read its `AGENTS.md` and follow steps 1–7. Its hard rules bind you for the whole session: dry run first, tokens stay sealed, `--import` only after the person's yes for that customer, one customer at a time. Done when the person has the counts per app and knows what each group means.
+   Read its `AGENTS.md` and follow steps 1–7. Its hard rules bind you for the whole session: dry run first, tokens and saved account files stay sealed, `--import` only after the person's yes for that customer, one customer at a time. Read `AGENTS.md` before you open any file the person names. Done when the person has the counts per app and knows what each group means.
 
 2. **Use Truto's docs, not memory.** Truto's docs MCP server is public, with no sign-in: `https://docs-mcp.truto.one/mcp` (streamable HTTP). Its tools are `search_docs`, `get_doc_page`, `list_api_endpoints` and `get_api_endpoint`.
    - The checker repo ships it in `.mcp.json` (Claude Code) and `.cursor/mcp.json` (Cursor).

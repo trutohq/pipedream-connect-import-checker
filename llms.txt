@@ -2,7 +2,7 @@
 
 > A CLI that checks which Pipedream Connect accounts can move to Truto without the customer connecting again. The default mode is a read-only dry run that writes a CSV and a JSON report with next steps per group. An opt-in import moves one customer at a time and deletes the Connect account only after the Truto account is verified.
 
-Pipedream Workflows shuts down on March 31, 2027. Pipedream Connect is not affected. Agents: read AGENTS.md first and follow its hard rules.
+Pipedream Workflows shuts down on March 31, 2027. Pipedream Connect is not affected. Agents: read AGENTS.md first and follow its hard rules. A saved list-accounts file holds live tokens: pass it to --accounts-file and leave it unopened.
 
 ## Docs
 

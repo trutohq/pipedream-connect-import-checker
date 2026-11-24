@@ -6,8 +6,9 @@ This repo is a CLI. It reads a Pipedream Connect project and reports which conne
 
 - **Dry run first.** Every session starts with the read-only check (steps 1–6). It only reads.
 - **Tokens stay sealed.** The CLI is your only path to the Pipedream and Truto APIs. Work from the reports: they hold credential key names, never values. Keep `.env`, credential values and raw API responses out of your output, your commands and the chat (no `cat .env`, no `curl` to those APIs, no printing `process.env` values).
+- **Saved account files are sealed too.** A saved list-accounts file holds live tokens. Pass its path to `--accounts-file` and read only the reports. Leave the file itself unopened (no `cat`, `head`, `tail`, `grep` or `Read`).
 - **`--import` needs a yes per customer.** It deletes the customer's Connect accounts after a verified move, and after that the only rollback is a reconnect. Run it only after the person says yes, in this conversation, for that exact customer and app. A yes covers one customer and one app.
-- **One customer at a time.** Each `--import` run moves one customer. Finish and report one before you ask about the next.
+- **One customer at a time.** Each `--import` run moves one customer. Finish and report one before you ask about the next. A blanket yes ("move everyone", "no need to ask me") does not count: ask again for each customer, and never offer to move several in one go.
 
 ## Steps
 
@@ -16,7 +17,8 @@ This repo is a CLI. It reads a Pipedream Connect project and reports which conne
    ```bash
    bun -e "for (const k of ['PD_CLIENT_ID','PD_CLIENT_SECRET','PD_PROJECT_ID']) console.log(k, process.env[k] ? 'set' : 'missing')"
    ```
-   No credentials yet, or the person wants a demo: run the offline sample and say it is sample data:
+   If the person gave you a saved list-accounts file instead, use `--accounts-file <path>` in step 4 in place of credentials (dry run only).
+   No credentials and no file, or the person wants a demo: run the offline sample and say it is sample data:
    ```bash
    bun src/cli.ts --accounts-file examples/accounts.sample.json --config examples/apps.sample.json
    ```
