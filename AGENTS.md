@@ -31,7 +31,7 @@ This repo is a CLI. It reads a Pipedream Connect project and reports which conne
 5. **Read `connect-report.json`.** `summary` has counts per app. `next_steps` has, per group, what it means, what to do and Truto docs links. Each row in `accounts` has `reasons` (why it is in its group) and `notes` (timing and unchecked items).
 6. **Explain.** Tell the person, per app: how many accounts are `movable`, `reconnect` and `manual_check`, what each group means (use `next_steps.<group>.meaning`), the main `reasons` behind `reconnect`, and every note that changes the plan. Done when every app in `summary` is covered.
 7. **Plan the cutover.** Per app, agree: move to Truto, or stay on Pipedream Connect (Connect is not shutting down). For apps that move, list the Truto setup from `next_steps.movable.steps`. For Truto setup and mapping workflows, follow `skills/pipedream-to-truto/SKILL.md`.
-8. **Import one customer** (hard rules apply). Needs a complete `apps.json` entry for the app and `TRUTO_API_TOKEN` in `.env`. Before you run it, tell the person the customer ID, the app, how many of that customer's accounts the report marks `movable`, and that those Connect accounts will be deleted. Wait for their yes.
+8. **Import one customer** (hard rules apply). Needs a complete `apps.json` entry for the app, plus the Pipedream credentials and `TRUTO_API_TOKEN` in `.env`. It reads live accounts, so a saved file cannot stand in. Before you run it, tell the person the customer ID, the app, how many of that customer's accounts the report marks `movable`, and that those Connect accounts will be deleted. Wait for their yes.
    ```bash
    bun src/cli.ts --import --config apps.json --app <slug> --external-user-id <customer>
    ```

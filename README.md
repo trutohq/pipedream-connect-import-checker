@@ -3,7 +3,7 @@
 Paste this into Claude Code, Cursor or Codex:
 
 ```text
-Check which of my Pipedream Connect accounts can move to Truto, using github.com/trutohq/pipedream-connect-import-checker. Read its AGENTS.md first.
+Check which of my Pipedream Connect accounts can move to Truto, using github.com/trutohq/pipedream-connect-import-checker. Read its AGENTS.md before you open any of my files.
 ```
 
 The agent clones this repo, reads [`AGENTS.md`](AGENTS.md), runs a read-only dry run, and explains the result. It moves a customer only after you say yes for that customer.
