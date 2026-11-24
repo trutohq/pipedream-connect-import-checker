@@ -45,9 +45,11 @@ export const NEXT_STEPS: Record<Status, NextSteps> = {
     ],
   },
   manual_check: {
-    meaning: 'Key-based, no-auth or unknown auth type. The import does not handle these.',
+    meaning: 'Key-based, no-auth or unknown auth type. Truto can import API key, basic auth and client-credential accounts, but this tool\'s --import moves OAuth accounts only.',
     steps: [
-      'Key-based app: test one account by hand. If Pipedream returned the key, create the Truto account with it. If not, the customer enters the key again.',
+      'Key-based app: check that credential_keys shows the key fields for one account. Pipedream\'s docs conflict on whether it returns them.',
+      'If the key is there, create the Truto account with POST /integrated-account: authentication_method "api_key" (API key or basic auth) or "oauth2_client_credentials" (Truto fetches the token), and context keys that match the integration\'s credential field names.',
+      'If the key is missing, the customer enters it again in Truto.',
       'No-auth app: nothing to import. Rebuild the logic only.',
     ],
     docs: [

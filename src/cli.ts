@@ -195,7 +195,7 @@ async function report(
   deps.out(formatSummary(summary))
   deps.out(`\nmovable      = OAuth on your own client, credentials returned, scopes present`)
   deps.out(`reconnect    = the customer must connect again in Truto`)
-  deps.out(`manual_check = key-based or no-auth app; test one account by hand`)
+  deps.out(`manual_check = key-based or no-auth app; Truto can import keys, check one account first`)
   if (!values.config) deps.out(`\nNo --config given: client IDs and scopes were not checked.`)
   deps.out(`\nReport: ${values.csv}, ${values.json} (next_steps in the JSON says what to do per group)`)
   return 0

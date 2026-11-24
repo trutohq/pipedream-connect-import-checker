@@ -23,7 +23,7 @@ An account is `movable` when all of these are true:
 
 | Check | Why |
 |---|---|
-| The app's `auth_type` is `oauth` | Key-based and no-auth apps are not confirmed to export. See [Limits](#limits). |
+| The app's `auth_type` is `oauth` | `--import` moves OAuth accounts only. Truto can import key-based accounts too, by hand. See [Limits](#limits). |
 | Connect returned credentials for it | Pipedream returns credentials "only applicable for BYOA apps", that is, apps on **your own** OAuth client. No credentials means Pipedream's own client, so the customer must reconnect. |
 | `credentials.oauth_client_id` equals the `clientId` in your config | A token issued to another client fails its first refresh on the new platform. |
 | `authorized_scopes` holds every scope in `requiredScopes` | A missing scope imports fine, then fails with `403`. |
@@ -55,7 +55,7 @@ TOTAL           8        2          4             2
 
 movable      = OAuth on your own client, credentials returned, scopes present
 reconnect    = the customer must connect again in Truto
-manual_check = key-based or no-auth app; test one account by hand
+manual_check = key-based or no-auth app; Truto can import keys, check one account first
 
 Report: connect-report.csv, connect-report.json (next_steps in the JSON says what to do per group)
 ```
@@ -66,7 +66,7 @@ Three rows of `connect-report.csv`:
 account_id,external_user_id,app,auth_type,status,reasons,notes,credential_keys,oauth_client_id,has_refresh_token,authorized_scopes,healthy,dead,expires_at,next_refresh_at
 "apn_good1","cus_1","slack","oauth","movable","","","oauth_access_token; oauth_client_id; oauth_refresh_token","1234.5678","true","chat:write; channels:read","true","false","2026-11-25T00:00:00.000Z","2026-11-24T23:00:00.000Z"
 "apn_pdclient","cus_2","slack","oauth","reconnect","no credentials returned (likely Pipedream's own OAuth client)","","","","false","chat:write; channels:read","true","false","2026-11-25T00:00:00.000Z","2026-11-24T23:00:00.000Z"
-"apn_keys1","cus_6","openai","keys","manual_check","key-based app: credential fields returned, import not confirmed; test one account by hand","","api_key","","false","","true","false","",""
+"apn_keys1","cus_6","openai","keys","manual_check","key-based app: credential fields returned; Truto can import it, check one account first","","api_key","","false","","true","false","",""
 ```
 
 `connect-report.json` holds `summary` (counts per app), `config_checked`, `accounts` (one row per account, as in the CSV) and `next_steps`. `next_steps` has one entry per group that has accounts, so a person or an agent can act on the report directly:
@@ -212,7 +212,12 @@ The logic is the guide's step 5 script. These changes close paths where a token 
 
 ## Limits
 
-- **Key-based apps** (`auth_type: keys`) are reported as `manual_check`. Pipedream's OAuth clients page says it stores key-based credentials "and exposes them via API", but the API reference limits returned credentials to BYOA apps. The import handles OAuth only. Test one key-based account by hand.
+- **Key-based apps** (`auth_type: keys`) are reported as `manual_check`. Truto imports API key, basic auth and client-credential accounts too, with [create integrated account](https://truto.one/docs/api-reference/admin/integrated-accounts/create/):
+  - API key or basic auth: `{"tenant_id": "…", "environment_integration_id": "…", "authentication_method": "api_key", "context": {"api_key": "…"}}`. Basic auth puts `username` and `password` in `context`.
+  - Client credentials: `"authentication_method": "oauth2_client_credentials"` and `"context": {"client_id": "…", "client_secret": "…"}`. Truto fetches the token itself.
+  - The `context` keys must match the integration's credential field names.
+
+  Check that Pipedream returns the key for one account first. Pipedream's docs conflict: the OAuth clients page says it stores key-based credentials "and exposes them via API", but the list-accounts reference says credentials are "only applicable for BYOA apps". This tool's `--import` moves OAuth accounts only.
 - **Refresh tokens that rotate.** After an import, both systems hold the same refresh token. With a rotating token (Jira, Slack with token rotation, maybe HubSpot and Salesforce), the first refresh by either side disables the other side's copy. So import mode moves one customer at a time, deletes the Connect account in the same run, and skips accounts Pipedream will refresh within 15 minutes. A short window between the import and the delete stays. If a run stops in that window, run it again soon.
 - **A rollback after a Truto refresh.** If Truto refreshes a rotating token during the check, and then the check fails, the rollback leaves Pipedream with a refresh token the provider has disabled. That customer must reconnect. The 15-minute expiry check makes this unlikely, not impossible.
 - **Does the Pipedream delete revoke the token at the provider?** The [delete account](https://pipedream.com/docs/connect/api-reference/delete-account) reference does not say. If it does, the imported token dies too. Test one account per app, and check the Truto account still works an hour after the delete.

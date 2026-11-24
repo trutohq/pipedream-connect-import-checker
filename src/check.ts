@@ -69,8 +69,8 @@ export function classify(a: PdAccount, rule: AppConfig | undefined, now: number)
     status = 'manual_check'
     reasons.push(
       creds && Object.keys(creds).length
-        ? 'key-based app: credential fields returned, import not confirmed; test one account by hand'
-        : 'key-based app: no credentials returned; customer likely reconnects',
+        ? 'key-based app: credential fields returned; Truto can import it, check one account first'
+        : 'key-based app: no credentials returned; the customer likely enters the key again in Truto',
     )
   } else if (authType === 'none') {
     status = 'manual_check'
